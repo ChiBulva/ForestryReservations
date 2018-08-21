@@ -8,21 +8,66 @@
 <body>
 	<div class="OverallDiv">
 		<div class="row">
-			<div class="column40">
+
+			<div class="column33">
 
 				<div class="AddReservationDiv">
 					<!--AddReservationDiv-->
 					AddReservationDiv
-					<img src="http://www.icesoft.org/wiki/download/attachments/5374162/input-form.png" alt="Paris" class="center">
+					<div>Onid user: {{ONIDUSERNAME}}</div>
+					<div>Item: {{TESTINPUT}}</div>
+
 				</div>
 
 			</div>
-			<div class="column60">
+
+			<div class="column33">
+
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 					AvailableItemsDiv
-					<img src="https://omextemplates.content.office.net/support/templates/en-us/lt16390566.png" alt="Paris" class="center">
+					<table style="width: 90%">
+						<th>Onid Username</th>
+						{% for dictItems in OnidList %}
+							<tr>
+								{% for key, value in dictItems.items() %}
+									<td>
+										<form method="url_for( Reservations )">
+											<input name="ONIDUSERNAME" value="{{value}}" type="submit" style="width: 100%">
+											<input name="TESTINPUT" value="{{TESTINPUT}}" type="hidden">
+										</form>
+									</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+
+					</table>
 				</div>
+
+			</div>
+			<div class="column33">
+
+				<div class="AvailableItemsDiv">
+					<!--AvailableItemsDiv-->
+					AvailableItemsDiv
+					<table style="width: 90%">
+						<th>Item</th><th>Status</th><th>Num2</th>
+						{% for dictItems in InventoryList %}
+							<tr>
+								{% for key, value in dictItems.items() %}
+									<td>
+										<form method="url_for( Reservations )">
+											<input name="TESTINPUT" value="{{value}}" type="submit" style="width: 100%">
+											<input name="ONIDUSERNAME" value="{{ONIDUSERNAME}}" type="hidden">
+										</form>
+									</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+
+					</table>
+				</div>
+
 			</div>
 
 		</div>
@@ -33,10 +78,17 @@
 				<div class="CheckedoutItems">
 					CheckedoutItems
 					<!--AvailableItemsDiv-->
-					<img src="http://www.ourgrouponline.com/Images/Help/Inventory/InventoryReport_CheckedOut.gif" alt="Paris" class="center">
-
+					<table style="width: 90%">
+						<th>Name</th><th>Num1</th><th>Num2</th>
+						{% for dictItems in InventoryList %}
+							<tr>
+								{% for key, value in dictItems.items() %}
+									<td>{{value}}</td>
+								{% endfor %}
+							</tr>
+						{% endfor %}
+					</table>
 				</div>
-
 			</div>
 			<div class="column40">
 
@@ -47,9 +99,9 @@
 				</div>
 
 			</div>
-
 		</div>
 	</div>
+
 <body>
 
 </html>

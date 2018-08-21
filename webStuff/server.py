@@ -4,19 +4,50 @@ import csv
 
 app = Flask(__name__)
 
-def readtextfile(x):
-    Teams = {}
-    with open('static/Games/game'+str(x)+'Bare.out','r') as inf:
-        Teams = eval(inf.read())
-    return Teams
+def csvtodict(filename):
+    passreader = csv.DictReader(open(filename, 'rb'))
+    dict_list = []
+    for line in passreader:
+        #print(line)
+        dict_list.append(line)
+    return dict_list
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST', 'TESTINPUT', 'ONIDUSERNAME'])
 def Reservations():
+    if request.method == 'POST':
+    	data = request.form
+    else:
+    	data = request.args
+
     print("Future of Forestry Reservations")
 
     x = "Future of Forestry Reservations"
 
-    return render_template('Homepage.html', x=x)
+    TESTINPUT = data.get('TESTINPUT')
+    ONIDUSERNAME = data.get('ONIDUSERNAME')
+
+    #fetches current cvs for Inventry
+    filename="./static/storage/test.csv"
+    InventoryList = csvtodict(filename)
+
+    #TODO: Create CSV's for inventory.
+    #TODO: Clean up CSS.
+    #TODO: Add buttons for submitting.
+    #TODO: .
+    #TODO: a query needs to be made nfor this.
+    #TODO: a query needs to be made nfor this.
+
+    #fetches current cvs for Inventry
+    filename="./static/storage/OnidUsernames.csv"
+    OnidList = csvtodict(filename)
+    #print(OnidList)
+
+    return render_template('Homepage.html',
+        x=x,
+        InventoryList=InventoryList,
+        OnidList=OnidList,
+        TESTINPUT=TESTINPUT,
+        ONIDUSERNAME=ONIDUSERNAME)
 
 '''
 @app.route('/results/', methods=['GET', 'POST'])
