@@ -4,6 +4,22 @@ import csv
 
 app = Flask(__name__)
 
+#Returns list of csv rows
+#
+def csvRowsList(filename):
+    with open("./static/storage/test.csv") as csvfile:
+        readCSV = list(csv.reader(csvfile, delimiter=','))
+    return readCSV
+
+#Returns specific row of csv
+#
+def csvSpecificRows(filename, x):
+    with open("./static/storage/test.csv") as csvfile:
+        readCSV = list(csv.reader(csvfile, delimiter=','))
+    return readCSV[x]
+
+#Turns a csv into a dictionary for easier display
+#
 def csvtodict(filename):
     passreader = csv.DictReader(open(filename, 'rb'))
     dict_list = []
@@ -12,7 +28,12 @@ def csvtodict(filename):
         dict_list.append(line)
     return dict_list
 
-@app.route('/', methods=['GET', 'POST', 'TESTINPUT', 'ONIDUSERNAME'])
+def Reserve():
+    print("RESERVED")
+
+#Main page
+#
+@app.route('/', methods=['GET', 'POST', 'Item', 'User', 'lenInventoryList', 'In', 'Out', 'Destination', 'Description', 'Rescheck', 'CheckoutTrigger'])
 def Reservations():
     if request.method == 'POST':
     	data = request.form
@@ -21,15 +42,6 @@ def Reservations():
 
     print("Future of Forestry Reservations")
 
-    x = "Future of Forestry Reservations"
-
-    TESTINPUT = data.get('TESTINPUT')
-    ONIDUSERNAME = data.get('ONIDUSERNAME')
-
-    #fetches current cvs for Inventry
-    filename="./static/storage/test.csv"
-    InventoryList = csvtodict(filename)
-
     #TODO: Create CSV's for inventory.
     #TODO: Clean up CSS.
     #TODO: Add buttons for submitting.
@@ -37,17 +49,59 @@ def Reservations():
     #TODO: a query needs to be made nfor this.
     #TODO: a query needs to be made nfor this.
 
+    x = "Future of Forestry Reservations"
+
+    Item = data.get('Item')
+    User = data.get('User')
+
+    #TODO assign these values
+    In = data.get('In')
+    Out = data.get('Out')
+    Destination = data.get('Destination')
+    Description = data.get('Description')
+    CheckoutTrigger = data.get('CheckoutTrigger')
+    Rescheck = 1
+
+    if(CheckoutTrigger=='1'):
+        print("Checkout: Item: "+str(Item)+" User: "+str(User))
+
+    if(Item!=None and Item!='None') and (User!=None and User!='None'):
+        Rescheck = 0;
+
+    #fetches current cvs for Inventry
+    filename="./static/storage/HelpdeskCheckoutItems.csv"
+    InventoryList = csvtodict(filename)
+
+    #fetches current cvs for REserved Item and Checked out Item
+    filename="./static/storage/CheckedoutandReserved.csv"
+    ReservedList = csvtodict(filename)
+
     #fetches current cvs for Inventry
     filename="./static/storage/OnidUsernames.csv"
     OnidList = csvtodict(filename)
     #print(OnidList)
 
+    readCSV = csvRowsList(filename)
+    row_you_want = readCSV[1]
+    print(row_you_want)
+
+    readCSV = csvSpecificRows(filename, 1)
+    row_you_want = readCSV
+    print(row_you_want)
+
     return render_template('Homepage.html',
         x=x,
         InventoryList=InventoryList,
         OnidList=OnidList,
-        TESTINPUT=TESTINPUT,
-        ONIDUSERNAME=ONIDUSERNAME)
+        ReservedList=ReservedList,
+        Item=Item,
+        User=User,
+        In=In,
+        Out=Out,
+        Destination=Destination,
+        Description=Description,
+        CheckoutTrigger=CheckoutTrigger,
+        Rescheck=Rescheck)
 
 '''
 @app.route('/results/', methods=['GET', 'POST'])

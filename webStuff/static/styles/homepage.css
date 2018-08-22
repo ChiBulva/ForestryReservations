@@ -37,8 +37,9 @@ body{
 
     .AddReservationDiv{
       background-color: yellow;
-
       padding: 0.5%;
+      height: 60%;
+      overflow-y: auto;
     }
 
     /* Vertical split here */
@@ -46,14 +47,9 @@ body{
     .AvailableItemsDiv{
       background-color: blue;
       padding: 0.5%;
+      height: 98%;
+      overflow-y: auto;
     }
-
-    .ReservedItemsDiv{
-      background-color: red;
-
-      padding: 0.5%;
-    }
-
 
 .BottomHorizontalsplit{
   /* Horizontal split here */
@@ -64,6 +60,8 @@ body{
       background-color: green;
 
       padding: 0.5%;
+      height: 98%;
+      overflow-y: auto;
     }
 
     /* Vertical split here */
@@ -72,6 +70,8 @@ body{
       background-color: white;
 
       padding: 0.5%;
+      height: 98%;
+      overflow-y: auto;
     }
 
 /*Applied to all divs*/
@@ -124,4 +124,22 @@ body{
     margin-right: auto;
     height: 98%;
     width: 98%;
+}
+
+.input{
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: block;
+    padding: 4px;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    opacity: 0.5;
+    border: solid 1px #666;
+}
+
+.SubmitButton{
+    width: 50%;
+    height: 35%;
+    float: left;
 }

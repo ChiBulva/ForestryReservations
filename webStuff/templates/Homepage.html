@@ -2,8 +2,9 @@
 
 <html>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/homepage.css') }}">
-
-{{x}}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/ItemFilter.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/datepicker.css') }}">
+<script type="text/javascript" src="static\scripts\ItemsDisplay.js" async></script>
 
 <body>
 	<div class="OverallDiv">
@@ -12,12 +13,43 @@
 			<div class="column33">
 
 				<div class="AddReservationDiv">
-					<!--AddReservationDiv-->
-					AddReservationDiv
-					<div>Onid user: {{ONIDUSERNAME}}</div>
-					<div>Item: {{TESTINPUT}}</div>
-
+					<div style="float: left; width: 50%;">
+						<label for="dateofbirth">In Date</label>
+						<input type="date" name="dateofbirth" id="dateofbirth">
+						<form action="/action_page.php">
+							Select a time: <input type="time" name="usr_time">
+						</form>
+					</div>
+					<div style="float: right; width: 50%;">
+						<label for="dateofbirth">Out Date</label>
+						<input type="date" name="dateofbirth" id="dateofbirth">
+						<form action="/action_page.php">
+  						Select a time: <input type="time" name="usr_time">
+						</form>
+					</div>
 				</div>
+					{% if Rescheck == 0 %}
+						<form method="url_for( Reserve )" class="SubmitButton">
+							<input value="Reserve Item" type="submit" style="width: 100%">
+							<input name="User" value="{{User}}" type="hidden">
+							<input name="Item" value="{{Item}}" type="hidden">
+							<input name="In" value="{{In}}" type="hidden">
+							<input name="Out" value="Out..." type="hidden">
+							<input name="Destination" value="Destination..." type="hidden">
+							<input name="Description" value="Description..." type="hidden">
+							<input name="CheckoutTrigger" value="1" type="hidden">
+						</form>
+						<form method="url_for( Reserve )" class="SubmitButton">
+							<input value="Checkout Item" type="submit" style="width: 100%">
+							<input name="User" value="{{User}}" type="hidden">
+							<input name="Item" value="{{Item}}" type="hidden">
+							<input name="In" value="{{In}}" type="hidden">
+							<input name="Out" value="Out..." type="hidden">
+							<input name="Destination" value="Destination..." type="hidden">
+							<input name="Description" value="Description..." type="hidden">
+							<input name="CheckoutTrigger" value="1" type="hidden">
+						</form>
+					{% endif %}
 
 			</div>
 
@@ -33,8 +65,8 @@
 								{% for key, value in dictItems.items() %}
 									<td>
 										<form method="url_for( Reservations )">
-											<input name="ONIDUSERNAME" value="{{value}}" type="submit" style="width: 100%">
-											<input name="TESTINPUT" value="{{TESTINPUT}}" type="hidden">
+											<input name="User" value="{{value}}" type="submit" style="width: 100%">
+											<input name="Item" value="{{Item}}" type="hidden">
 										</form>
 									</td>
 								{% endfor %}
@@ -50,22 +82,32 @@
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 					AvailableItemsDiv
-					<table style="width: 90%">
-						<th>Item</th><th>Status</th><th>Num2</th>
-						{% for dictItems in InventoryList %}
-							<tr>
-								{% for key, value in dictItems.items() %}
-									<td>
+						<th>Item</th><th>Status</th>
+						<div id="myBtnContainer">
+  						<button class="btn active" onclick="filterSelection('all')"> Show all</button>
+  						<button class="btn" onclick="filterSelection('Laptop')"> Laptops</button>
+  						<button class="btn" onclick="filterSelection('ConferenceCam')"> Conference Cams</button>
+  						<button class="btn" onclick="filterSelection('Projector')"> Projectors</button>
+  						<button class="btn" onclick="filterSelection('Presenter')"> Presenters</button>
+  						<button class="btn" onclick="filterSelection('Webcam')"> Webcams</button>
+							<button class="btn" onclick="filterSelection('Reader')"> Readers</button>
+							<button class="btn" onclick="filterSelection('Adapters')"> Adapters</button>
+							<button class="btn" onclick="filterSelection('Cables')"> Cables</button>
+							<button class="btn" onclick="filterSelection('Microphone')"> Microphones</button>
+							<button class="btn" onclick="filterSelection('other')"> other</button>
+						</div>
+						<div class="container">
+							{% for dictItems in InventoryList %}
+								{% if dictItems['Status'] == 'in' %}
+				  				<div class="filterDiv {{dictItems['ItemType']}}">
 										<form method="url_for( Reservations )">
-											<input name="TESTINPUT" value="{{value}}" type="submit" style="width: 100%">
-											<input name="ONIDUSERNAME" value="{{ONIDUSERNAME}}" type="hidden">
+											<input name="User" value="{{User}}" type="hidden">
+											<input name="Item" value="{{dictItems['Item']}}" type="submit" style="width: 100%">
 										</form>
-									</td>
-								{% endfor %}
-							</tr>
-						{% endfor %}
-
-					</table>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
 				</div>
 
 			</div>
@@ -74,17 +116,44 @@
 		<div class="row">
 
 			<div class="column60">
-
 				<div class="CheckedoutItems">
 					CheckedoutItems
 					<!--AvailableItemsDiv-->
 					<table style="width: 90%">
-						<th>Name</th><th>Num1</th><th>Num2</th>
-						{% for dictItems in InventoryList %}
-							<tr>
-								{% for key, value in dictItems.items() %}
-									<td>{{value}}</td>
-								{% endfor %}
+						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Destination</th><th>Description</th><th>Status</th><th>Check-In</th>
+						{% for dictItems in ReservedList %}
+							<tr style="background-color: white;">
+									<td>
+										{{dictItems['Item']}}
+									</td>
+									<td>
+										{{dictItems['User']}}
+									</td>
+									<td>
+										{{dictItems['In']}}
+									</td>
+									<td>
+										{{dictItems['Out']}}
+									</td>
+									<td>
+										{{dictItems['Destination']}}
+									</td>
+									<td>
+										{{dictItems['Description']}}
+									</td>
+									{% if dictItems['Status'] == 'out' %}
+										<td style="background-color: yellow;">
+											{{dictItems['Status']}}
+										</td>
+									{% endif %}
+									{% if dictItems['Status'] == 'reserved' %}
+										<td style="background-color: red;">
+											{{dictItems['Status']}}
+										</td>
+									{% endif %}
+									<td>
+										Check-In
+									</td>
 							</tr>
 						{% endfor %}
 					</table>
