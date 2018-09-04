@@ -14,40 +14,40 @@
 
 				<div class="AddReservationDiv">
 					<div style="float: left; width: 50%;">
-						<label for="dateofbirth">In Date</label>
-						<input type="date" name="dateofbirth" id="dateofbirth">
+						<label for="dateOut">In Date</label>
+						<input type="date" name="Out" id="dateOut">
 						<form action="/action_page.php">
-							Select a time: <input type="time" name="usr_time">
+							Select a time: <input type="time" name="Out">
 						</form>
 					</div>
 					<div style="float: right; width: 50%;">
-						<label for="dateofbirth">Out Date</label>
-						<input type="date" name="dateofbirth" id="dateofbirth">
+						<label for="dateIn">Out Date</label>
+						<input type="date" name="In" id="dateIn">
 						<form action="/action_page.php">
-  						Select a time: <input type="time" name="usr_time">
+  						Select a time: <input type="time" name="In">
 						</form>
 					</div>
 				</div>
 					{% if Rescheck == 0 %}
 						<form method="url_for( Reserve )" class="SubmitButton">
-							<input value="Reserve Item" type="submit" style="width: 100%">
-							<input name="User" value="{{User}}" type="hidden">
-							<input name="Item" value="{{Item}}" type="hidden">
-							<input name="In" value="{{In}}" type="hidden">
-							<input name="Out" value="Out..." type="hidden">
-							<input name="Destination" value="Destination..." type="hidden">
-							<input name="Description" value="Description..." type="hidden">
-							<input name="CheckoutTrigger" value="1" type="hidden">
-						</form>
-						<form method="url_for( Reserve )" class="SubmitButton">
 							<input value="Checkout Item" type="submit" style="width: 100%">
 							<input name="User" value="{{User}}" type="hidden">
 							<input name="Item" value="{{Item}}" type="hidden">
-							<input name="In" value="{{In}}" type="hidden">
-							<input name="Out" value="Out..." type="hidden">
-							<input name="Destination" value="Destination..." type="hidden">
-							<input name="Description" value="Description..." type="hidden">
+							<input name="Out" value="{{In}}" type="hidden" id="dateIn">
+							<input name="In" value="{{Out}}" type="hidden" id="dateOut">
+							<input name="Destination" value="{{Destination}}" type="hidden">
+							<input name="Description" value="{{Description}}" type="hidden">
 							<input name="CheckoutTrigger" value="1" type="hidden">
+						</form>
+						<form method="url_for( Reserve )" class="SubmitButton">
+							<input value="Reserve Item" type="submit" style="width: 100%">
+							<input name="User" value="{{User}}" type="hidden">
+							<input name="Item" value="{{Item}}" type="hidden">
+							<input name="In" value="{{In}}" type="hidden" id="dateIn">
+							<input name="Out" value="{{Out}}" type="hidden" id="dateOut">
+							<input name="Destination" value="{{Destination}}" type="hidden">
+							<input name="Description" value="{{Description}}" type="hidden">
+							<input name="ReserveTrigger" value="1" type="hidden">
 						</form>
 					{% endif %}
 
@@ -152,7 +152,12 @@
 										</td>
 									{% endif %}
 									<td>
-										Check-In
+										<form method="url_for( Reserve )" class="CheckInButton">
+											<input value="Check-In" type="submit" style="width: 100%">
+											<input name="User" value="{{dictItems['User']}}" type="hidden">
+											<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+											<input name="CheckinTrigger" value="1" type="hidden">
+										</form>
 									</td>
 							</tr>
 						{% endfor %}

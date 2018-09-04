@@ -143,3 +143,7 @@ body{
     height: 35%;
     float: left;
 }
+
+.CheckInButton{
+  width: 98%;
+}
