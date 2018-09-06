@@ -1,4 +1,1 @@
-Item,User,In,Out,Destination,Description,Status
-PR3,Aarika,None,None,None,None,reserved
-SS2,Abbey,None,None,None,None,reserved
-Presenter3,Abbey,None,None,None,None,reserved
+Item,User,In,Out,DateIn,DateOut,Destination,Description,Status

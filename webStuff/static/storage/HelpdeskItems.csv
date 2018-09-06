@@ -1,8 +1,8 @@
 Number,Item,ItemType,Status,Description
 1,PR2,Laptop,in,item Description
-2,PR3,Laptop,reserved,item Description
+2,PR3,Laptop,in,item Description
 3,SS1,Laptop,in,item Description
-4,SS2,Laptop,reserved,item Description
+4,SS2,Laptop,in,item Description
 5,A4,Laptop,in,item Description
 6,A5,Laptop,in,item Description
 7,A6,Laptop,in,item Description
@@ -24,7 +24,7 @@ Number,Item,ItemType,Status,Description
 23,Qsm,Projector,in,item Description
 24,Presenter1,Presenter,in,item Description
 25,Presenter2,Presenter,in,item Description
-26,Presenter3,Presenter,reserved,item Description
+26,Presenter3,Presenter,in,item Description
 27,Webcam1,Webcam,in,item Description
 28,Webcam2,Webcam,in,item Description
 29,Webcam3,Webcam,in,item Description

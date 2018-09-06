@@ -7,51 +7,9 @@
 <script type="text/javascript" src="static\scripts\ItemsDisplay.js" async></script>
 
 <body>
+
 	<div class="OverallDiv">
 		<div class="row">
-
-			<div class="column33">
-
-				<div class="AddReservationDiv">
-					<div style="float: left; width: 50%;">
-						<label for="dateOut">In Date</label>
-						<input type="date" name="Out" id="dateOut">
-						<form action="/action_page.php">
-							Select a time: <input type="time" name="Out">
-						</form>
-					</div>
-					<div style="float: right; width: 50%;">
-						<label for="dateIn">Out Date</label>
-						<input type="date" name="In" id="dateIn">
-						<form action="/action_page.php">
-  						Select a time: <input type="time" name="In">
-						</form>
-					</div>
-				</div>
-					{% if Rescheck == 0 %}
-						<form method="url_for( Reserve )" class="SubmitButton">
-							<input value="Checkout Item" type="submit" style="width: 100%">
-							<input name="User" value="{{User}}" type="hidden">
-							<input name="Item" value="{{Item}}" type="hidden">
-							<input name="Out" value="{{In}}" type="hidden" id="dateIn">
-							<input name="In" value="{{Out}}" type="hidden" id="dateOut">
-							<input name="Destination" value="{{Destination}}" type="hidden">
-							<input name="Description" value="{{Description}}" type="hidden">
-							<input name="CheckoutTrigger" value="1" type="hidden">
-						</form>
-						<form method="url_for( Reserve )" class="SubmitButton">
-							<input value="Reserve Item" type="submit" style="width: 100%">
-							<input name="User" value="{{User}}" type="hidden">
-							<input name="Item" value="{{Item}}" type="hidden">
-							<input name="In" value="{{In}}" type="hidden" id="dateIn">
-							<input name="Out" value="{{Out}}" type="hidden" id="dateOut">
-							<input name="Destination" value="{{Destination}}" type="hidden">
-							<input name="Description" value="{{Description}}" type="hidden">
-							<input name="ReserveTrigger" value="1" type="hidden">
-						</form>
-					{% endif %}
-
-			</div>
 
 			<div class="column33">
 
@@ -82,7 +40,6 @@
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 					AvailableItemsDiv
-						<th>Item</th><th>Status</th>
 						<div id="myBtnContainer">
   						<button class="btn active" onclick="filterSelection('all')"> Show all</button>
   						<button class="btn" onclick="filterSelection('Laptop')"> Laptops</button>
@@ -99,10 +56,25 @@
 						<div class="container">
 							{% for dictItems in InventoryList %}
 								{% if dictItems['Status'] == 'in' %}
-				  				<div class="filterDiv {{dictItems['ItemType']}}">
+				  				<div class="filterDiv {{dictItems['ItemType']}}" style="background-color: white;">
 										<form method="url_for( Reservations )">
 											<input name="User" value="{{User}}" type="hidden">
 											<input name="Item" value="{{dictItems['Item']}}" type="submit" style="width: 100%">
+										</form>
+									</div>
+								{% endif %}
+								{% if dictItems['Status'] == 'reserved' %}
+									<div class="filterDiv {{dictItems['ItemType']}}" style="background-color: red;">
+										<form method="url_for( Reservations )">
+											<input name="User" value="{{User}}" type="hidden">
+											<input name="Item" value="{{dictItems['Item']}}" type="submit" style="width: 100%">
+										</form>
+									</div>
+								{% endif %}
+								{% if dictItems['Status'] == 'out' %}
+									<div class="filterDiv {{dictItems['ItemType']}}" style="background-color: yellow; color: black;">
+										<form method="url_for( Reservations )">
+											{{dictItems['Item']}}
 										</form>
 									</div>
 								{% endif %}
@@ -111,6 +83,78 @@
 				</div>
 
 			</div>
+			<div class="column33">
+			<form method="{{ url_for('Reservations') }}" class="SubmitButton" style="height: 100%; width: 100%">
+					{% if User != 'None' %}
+						<div style="width: 50%;">{{User}}</div>
+					{% else %}
+						<div style="width: 50%;">Pick a User</div>
+					{% endif %}
+					{% if Item != 'None' %}
+						<div style="width: 50%;">{{Item}}</div>
+					{% else %}
+						<div style="width: 50%;">Pick an Item</div>
+					{% endif %}
+					{% if Rescheck == 0 %}
+
+				<div class="AddReservationDiv">
+					<div style="float: left; width: 50%;">
+						<input type="date" value="1980-08-26" name="DateOut" style="width: 100%">
+						<select name="TimeOut">
+						  <option value="8">8:00 AM</option>
+						  <option value="9">9:00 AM</option>
+						  <option value="10">10:00 AM</option>
+						  <option value="11">11:00 AM</option>
+							<option value="12">12:00 PM</option>
+							<option value="13">1:00 PM</option>
+							<option value="14">2:00 PM</option>
+							<option value="15">3:00 PM</option>
+							<option value="16">4:00 PM</option>
+							<option value="17">5:00 PM</option>
+							<option value="18">6:00 PM</option>
+						</select>
+
+					</div>
+					<div style="float: right; width: 50%;">
+						<input type="date" value="1980-08-26" name="DateIn" style="width: 100%">
+						<select name="TimeIn">
+						  <option value="8">8:00 AM</option>
+						  <option value="9">9:00 AM</option>
+						  <option value="10">10:00 AM</option>
+						  <option value="11">11:00 AM</option>
+							<option value="12">12:00 PM</option>
+							<option value="13">1:00 PM</option>
+							<option value="14">2:00 PM</option>
+							<option value="15">3:00 PM</option>
+							<option value="16">4:00 PM</option>
+							<option value="17">5:00 PM</option>
+							<option value="18">6:00 PM</option>
+						</select>
+					</div>
+
+					<input type="text" name="Description" placeholder="Description..." style="height: 20%">
+					<input type="text" name="Destination" placeholder="Destination..." style="height: 20%">
+
+				</div>
+
+  					<!--<input type="button" value="Reserve" onClick="ButtonTriggerReserved(this);" id="CheckoutTrigger">
+						<input type="button" value="Checkout" onClick="ButtonTriggerCheckout(this);" id="ReserveTrigger">
+					-->
+
+						<input name="User" value="{{User}}" type="hidden">
+						<input name="Item" value="{{Item}}" type="hidden">
+						<input name="Destination" value="{{Destination}}" type="hidden">
+						<input name="Description" value="{{Description}}" type="hidden">
+
+						<input name="CheckoutTrigger" value="Checkout Item" type="submit" style="width: 100%">
+						<input name="ReserveTrigger" value="Reserve Item" type="submit" style="width: 100%">
+
+					</form>
+				{% endif %}
+
+
+			</div>
+
 
 		</div>
 		<div class="row">
@@ -120,7 +164,7 @@
 					CheckedoutItems
 					<!--AvailableItemsDiv-->
 					<table style="width: 90%">
-						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Destination</th><th>Description</th><th>Status</th><th>Check-In</th>
+						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Date In</th><th>Date Out</th><th>Destination</th><th>Description</th><th>Status</th><th>Check-In</th>
 						{% for dictItems in ReservedList %}
 							<tr style="background-color: white;">
 									<td>
@@ -134,6 +178,12 @@
 									</td>
 									<td>
 										{{dictItems['Out']}}
+									</td>
+									<td>
+										{{dictItems['DateIn']}}
+									</td>
+									<td>
+										{{dictItems['DateOut']}}
 									</td>
 									<td>
 										{{dictItems['Destination']}}
@@ -153,12 +203,23 @@
 									{% endif %}
 									<td>
 										<form method="url_for( Reserve )" class="CheckInButton">
-											<input value="Check-In" type="submit" style="width: 100%">
+											<input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%">
 											<input name="User" value="{{dictItems['User']}}" type="hidden">
 											<input name="Item" value="{{dictItems['Item']}}" type="hidden">
-											<input name="CheckinTrigger" value="1" type="hidden">
+											<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
 										</form>
 									</td>
+									{% if dictItems['Status'] == 'reserved' %}
+									<br>
+										<td style="background-color: yellow;">
+											<form method="url_for( Reserve )" class="CheckInButton">
+												<input name="CheckOutRes" value="Check Out" type="submit" style="width: 100%">
+												<input name="User" value="{{dictItems['User']}}" type="hidden">
+												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+											</form>
+										</td>
+									{% endif %}
 							</tr>
 						{% endfor %}
 					</table>
@@ -177,5 +238,7 @@
 	</div>
 
 <body>
+
+
 
 </html>

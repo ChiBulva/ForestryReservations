@@ -6,37 +6,44 @@ app = Flask(__name__)
 
 # CSV functions
 ################################################################################################################################################################
-#                                       1       2       3       4       5         6       7       8       9       10
-#   Files:  HelpdeskItems           ( Number, Item,  ItemType,Status,Description )
-#           CheckedoutandReserved   ( Item,   User,    In,    Out,    Dest,     Desc,  Status )
-#           OnidUsernames           ( Onid )
-#
-#   Needs:  Buttons: ReserveItem
-
-def checkoutitem(Item, User, In, Out, Destination, Description):
+# -                                     1       2       3       4       5         6       7       8       9       10
+# - Files:  HelpdeskItems           ( Number, Item,  ItemType,Status,Description )
+# -         CheckedoutandReserved   ( Item,   User,    In,    Out,    Dest,     Desc,  Status )
+# -         OnidUsernames           ( Onid )
+# -
+# - Needs:  Buttons: ReserveItem
+# -
+def checkoutitem(Item, User, In, Out, DateIn, DateOut, Destination, Description):
     DesiredStatus = "out"
     #Error checking done here
     #
     changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, "reserved")
-    addRowToCheckedOutAndReserved(Item, User, In, Out, Destination, Description, DesiredStatus)
-
+    addRowToCheckedOutAndReserved(Item, User, In, Out, DateIn, DateOut, Destination, Description, DesiredStatus)
+# -
+# -
 def checkinitem(Item, User):
     DesiredStatus = "in"
     print(User)
     print(Item)
     changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, DesiredStatus)
-
-def reserveitem(Item, User, In, Out, Destination, Description):
-#    item = "PR2"
+# -
+# -
+def reserveitem(Item, User, In, Out, DateIn, DateOut, Destination, Description):
     DesiredStatus = "reserved"
     changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, "out")
-    addRowToCheckedOutAndReserved(Item, User, In, Out, Destination, Description, DesiredStatus)
-#    addRowToCheckedOutAndReserved(item, "Adoree", "12:00 pm", "1:00 pm", "RH 215", "Meeting", DesiredStatus)
+    addRowToCheckedOutAndReserved(Item, User, In, Out, DateIn, DateOut, Destination, Description, DesiredStatus)
 
-
+def reservecheckout(Item, User):
+    DesiredStatus = "out"
+    changeStatus(DesiredStatus, Item)
+# -
+# -
+################################################################################################################################################################
+# +  Actual manipulation of CSV files
+# +
 def changeStatus(DesiredStatus, Item):
     inputfile = csv.reader(open('./static/storage/HelpdeskItems.csv','r'))
     #outfile =
@@ -52,23 +59,53 @@ def changeStatus(DesiredStatus, Item):
         #print(row)
         outfile.writerow(row)
 
-
-def addRowToCheckedOutAndReserved(Item, User, TimeIn, TimeOut, Dest, Desc, DesiredStatus):
-    inputfile = csv.reader(open('./static/storage/CheckedoutandReserved.csv','r'))
+def ResToOut(DesiredStatus, Item):
+    print("INSIDE OMG")
+    inputfile = csv.reader(open('./static/storage/HelpdeskItems.csv','r'))
+    #outfile =
     newFileArray = []
     for row in inputfile:
+        if(row[1]==Item):
+            newFileArray.append([(str(row[0])),(str(row[1])),(str(row[2])),(str(DesiredStatus)),(str(row[4]))])
+        else:
+            newFileArray.append(row)
 
-        newFileArray.append(row)
+    outfile = csv.writer(open('./static/storage/HelpdeskItems.csv','w'))
+    for row in newFileArray:
+        #print(row)
+        outfile.writerow(row)
 
-    newFileArray.append([Item, User, TimeIn, TimeOut, Dest, Desc, DesiredStatus])
+    inputfile = csv.reader(open('./static/storage/CheckedoutandReserved.csv','r'))
+    #outfile =
+    newFileArray = []
+    for row in inputfile:
+        print(row)
+        if(row[0]==Item):
+            newFileArray.append([(str(row[0])),(str(row[1])),(str(row[2])),(str(row[3])),(str(row[4])),(str(row[5])),(str(row[6])),(str(row[7])),(str(DesiredStatus))])
+        else:
+            newFileArray.append(row)
 
     outfile = csv.writer(open('./static/storage/CheckedoutandReserved.csv','w'))
     for row in newFileArray:
         #print(row)
         outfile.writerow(row)
+# +
+# +
+def addRowToCheckedOutAndReserved(Item, User, TimeIn, TimeOut, DateIn, DateOut, Dest, Desc, DesiredStatus):
+    inputfile = csv.reader(open('./static/storage/CheckedoutandReserved.csv','r'))
+    newFileArray = []
+    for row in inputfile:
+        newFileArray.append(row)
 
+    newFileArray.append([Item, User, TimeIn, TimeOut, DateIn, DateOut, Dest, Desc, DesiredStatus])
 
-def delRowFromCheckedOutAndReserved(Item, User, DesiredStatus):
+    outfile = csv.writer(open('./static/storage/CheckedoutandReserved.csv','w'))
+    for row in newFileArray:
+        #print(row)
+        outfile.writerow(row)
+# +
+# +
+def delRowFromCheckedOutAndReserved(Item, User,  DesiredStatus):
     inputfile = csv.reader(open('./static/storage/CheckedoutandReserved.csv','r'))
     newFileArray = []
     for row in inputfile:
@@ -81,10 +118,8 @@ def delRowFromCheckedOutAndReserved(Item, User, DesiredStatus):
     for row in newFileArray:
         #print(row)
         outfile.writerow(row)
-
-#        if(row[3]!="in"):
-#            print (str(row[1])+" "+str(row[3]))
-
+# +
+# +
 ################################################################################################################################################################
 
 #Returns list of csv rows
@@ -101,7 +136,7 @@ def csvSpecificRows(filename, x):
         readCSV = list(csv.reader(csvfile, delimiter=','))
     return readCSV[x]
 
-#Turns a csv into a dictionary for easier display
+# Turns a csv into a dictionary for easier display
 #
 def csvtodict(filename):
     passreader = csv.DictReader(open(filename, 'rb'))
@@ -116,7 +151,7 @@ def Reserve():
 
 #Main page
 #
-@app.route('/', methods=['GET', 'POST', 'Item', 'User', 'lenInventoryList', 'In', 'Out', 'Destination', 'Description', 'Rescheck', 'CheckoutTrigger', 'ReserveTrigger', 'CheckinTrigger'])
+@app.route('/', methods=['GET', 'POST', 'Item', 'User', 'lenInventoryList', 'TimeIn', 'TimeOut', 'DateIn', 'DateOut', 'Destination', 'Description', 'Rescheck', 'CheckoutTrigger', 'ReserveTrigger', 'CheckinTrigger', 'CheckOutRes'])
 def Reservations():
     if request.method == 'POST':
     	data = request.form
@@ -138,27 +173,39 @@ def Reservations():
     User = data.get('User')
 
     #TODO assign these values
-    In = data.get('In')
-    Out = data.get('Out')
+    TimeIn = data.get('TimeIn')
+    TimeOut = data.get('TimeOut')
     Destination = data.get('Destination')
     Description = data.get('Description')
     CheckoutTrigger = data.get('CheckoutTrigger')
     ReserveTrigger = data.get('ReserveTrigger')
     CheckinTrigger = data.get('CheckinTrigger')
+    CheckOutRes = data.get('CheckOutRes')
+    DateIn = data.get('DateIn')
+    DateOut = data.get('DateOut')
     Rescheck = 1
 
+    print()
+    print(CheckoutTrigger)
+    print(ReserveTrigger)
+    print()
+
     #will check out an item
-    if(CheckoutTrigger=='1'):
-        print("Checkout: Item: "+str(Item)+" User: "+str(User))
-        checkoutitem(Item, User, In, Out, Destination, Description)
+    if(CheckoutTrigger=='Checkout Item'):
+        checkoutitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description)
 
-    elif(CheckinTrigger=='1'):
-        print("Checkin: Item: "+str(Item)+" User: "+str(User))
+    elif(CheckinTrigger=='Check-In'):
         checkinitem(Item, User)
+        Item = 'None'
+        User = 'None'
 
-    elif(ReserveTrigger=='1'):
-        print("Checkin: Item: "+str(Item)+" User: "+str(User))
-        reserveitem(Item, User, In, Out, Destination, Description)
+    elif(CheckOutRes=='Check Out'):
+        ResToOut("out", Item)
+        Item = 'None'
+        User = 'None'
+
+    elif(ReserveTrigger=='Reserve Item'):
+        reserveitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description)
 
     if(Item!=None and Item!='None') and (User!=None and User!='None'):
         Rescheck = 0;
@@ -176,12 +223,12 @@ def Reservations():
     OnidList = csvtodict(filename)
     #print(OnidList)
 
-    readCSV = csvRowsList(filename)
-    row_you_want = readCSV[1]
+    #readCSV = csvRowsList(filename)
+    #row_you_want = readCSV[1]
     #print(row_you_want)
 
-    readCSV = csvSpecificRows(filename, 1)
-    row_you_want = readCSV
+    #readCSV = csvSpecificRows(filename, 1)
+    #row_you_want = readCSV
     #print(row_you_want)
 
     return render_template('Homepage.html',
@@ -191,29 +238,18 @@ def Reservations():
         ReservedList=ReservedList,
         Item=Item,
         User=User,
-        In=In,
-        Out=Out,
+        TimeIn=TimeIn,
+        TimeOut=TimeOut,
         Destination=Destination,
         Description=Description,
         CheckoutTrigger=CheckoutTrigger,
         ReserveTrigger=ReserveTrigger,
         CheckinTrigger=CheckinTrigger,
+        CheckOutRes=CheckOutRes,
+        DateIn=DateIn,
+        DateOut=DateOut,
         Rescheck=Rescheck)
 
-'''
-@app.route('/results/', methods=['GET', 'POST'])
-def results():
-	if request.method == 'POST':
-		data = request.form
-	else:
-		data = request.args
-
-	query = data.get('searchterm')
-	print("You searched for: " + query)
-	firstName = ['Ben','Sarah', 'Xandar', 'Ellewyn']
-	lastName = ['McCamish', 'G', 'Quazar', 'Sabbeth']
-	return render_template('results.html', query=query, results=zip(firstName, lastName))
-'''
 #Found at URL: http://flask.pocoo.org/snippets/40/
 @app.context_processor
 def override_url_for():
