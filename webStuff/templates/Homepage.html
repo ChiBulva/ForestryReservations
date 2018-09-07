@@ -1,18 +1,13 @@
 <!doctype html>
 
-<html>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/homepage.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/ItemFilter.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/datepicker.css') }}">
 <script type="text/javascript" src="static\scripts\ItemsDisplay.js" async></script>
-
-<body>
-
+<html>
 	<div class="OverallDiv">
 		<div class="row">
-
 			<div class="column33">
-
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 					AvailableItemsDiv
@@ -30,13 +25,10 @@
 								{% endfor %}
 							</tr>
 						{% endfor %}
-
 					</table>
 				</div>
-
 			</div>
 			<div class="column33">
-
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 					AvailableItemsDiv
@@ -81,7 +73,6 @@
 							{% endfor %}
 						</div>
 				</div>
-
 			</div>
 			<div class="column33">
 			<form method="{{ url_for('Reservations') }}" class="SubmitButton" style="height: 100%; width: 100%">
@@ -96,51 +87,42 @@
 						<div style="width: 50%;">Pick an Item</div>
 					{% endif %}
 					{% if Rescheck == 0 %}
-
 				<div class="AddReservationDiv">
 					<div style="float: left; width: 50%;">
 						<input type="date" value="1980-08-26" name="DateOut" style="width: 100%">
 						<select name="TimeOut">
-						  <option value="8">8:00 AM</option>
-						  <option value="9">9:00 AM</option>
-						  <option value="10">10:00 AM</option>
-						  <option value="11">11:00 AM</option>
-							<option value="12">12:00 PM</option>
-							<option value="13">1:00 PM</option>
-							<option value="14">2:00 PM</option>
-							<option value="15">3:00 PM</option>
-							<option value="16">4:00 PM</option>
-							<option value="17">5:00 PM</option>
-							<option value="18">6:00 PM</option>
+						  <option value="8:00 AM">8:00 AM</option>
+						  <option value="9:00 AM">9:00 AM</option>
+						  <option value="10:00 AM">10:00 AM</option>
+						  <option value="11:00 AM">11:00 AM</option>
+							<option value="2:00 PM">12:00 PM</option>
+							<option value="1:00 PM">1:00 PM</option>
+							<option value="2:00 PM">2:00 PM</option>
+							<option value="3:00 PM">3:00 PM</option>
+							<option value="4:00 PM">4:00 PM</option>
+							<option value="5:00 PM">5:00 PM</option>
+							<option value="6:00 PM">6:00 PM</option>
 						</select>
-
 					</div>
 					<div style="float: right; width: 50%;">
 						<input type="date" value="1980-08-26" name="DateIn" style="width: 100%">
 						<select name="TimeIn">
-						  <option value="8">8:00 AM</option>
-						  <option value="9">9:00 AM</option>
-						  <option value="10">10:00 AM</option>
-						  <option value="11">11:00 AM</option>
-							<option value="12">12:00 PM</option>
-							<option value="13">1:00 PM</option>
-							<option value="14">2:00 PM</option>
-							<option value="15">3:00 PM</option>
-							<option value="16">4:00 PM</option>
-							<option value="17">5:00 PM</option>
-							<option value="18">6:00 PM</option>
+						  <option value="8:00 AM">8:00 AM</option>
+						  <option value="9:00 AM">9:00 AM</option>
+						  <option value="10:00 AM">10:00 AM</option>
+						  <option value="11:00 AM">11:00 AM</option>
+							<option value="12:00 PM">12:00 PM</option>
+							<option value="1:00 PM">1:00 PM</option>
+							<option value="2:00 PM">2:00 PM</option>
+							<option value="3:00 PM">3:00 PM</option>
+							<option value="4:00 PM">4:00 PM</option>
+							<option value="5:00 PM">5:00 PM</option>
+							<option value="6:00 PM">6:00 PM</option>
 						</select>
 					</div>
-
 					<input type="text" name="Description" placeholder="Description..." style="height: 20%">
 					<input type="text" name="Destination" placeholder="Destination..." style="height: 20%">
-
 				</div>
-
-  					<!--<input type="button" value="Reserve" onClick="ButtonTriggerReserved(this);" id="CheckoutTrigger">
-						<input type="button" value="Checkout" onClick="ButtonTriggerCheckout(this);" id="ReserveTrigger">
-					-->
-
 						<input name="User" value="{{User}}" type="hidden">
 						<input name="Item" value="{{Item}}" type="hidden">
 						<input name="Destination" value="{{Destination}}" type="hidden">
@@ -148,14 +130,9 @@
 
 						<input name="CheckoutTrigger" value="Checkout Item" type="submit" style="width: 100%">
 						<input name="ReserveTrigger" value="Reserve Item" type="submit" style="width: 100%">
-
 					</form>
 				{% endif %}
-
-
 			</div>
-
-
 		</div>
 		<div class="row">
 
@@ -164,7 +141,7 @@
 					CheckedoutItems
 					<!--AvailableItemsDiv-->
 					<table style="width: 90%">
-						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Date In</th><th>Date Out</th><th>Destination</th><th>Description</th><th>Status</th><th>Check-In</th>
+						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Date In</th><th>Date Out</th><th>Destination</th><th>Description</th><th>Status</th>
 						{% for dictItems in ReservedList %}
 							<tr style="background-color: white;">
 									<td>
@@ -195,22 +172,29 @@
 										<td style="background-color: yellow;">
 											{{dictItems['Status']}}
 										</td>
+										<td>
+											<form method="url_for( Reserve )" class="CheckInButton">
+												<input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%">
+												<input name="User" value="{{dictItems['User']}}" type="hidden">
+												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+											</form>
+										</td>
 									{% endif %}
 									{% if dictItems['Status'] == 'reserved' %}
 										<td style="background-color: red;">
 											{{dictItems['Status']}}
 										</td>
-									{% endif %}
-									<td>
-										<form method="url_for( Reserve )" class="CheckInButton">
-											<input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%">
-											<input name="User" value="{{dictItems['User']}}" type="hidden">
-											<input name="Item" value="{{dictItems['Item']}}" type="hidden">
-											<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
-										</form>
-									</td>
-									{% if dictItems['Status'] == 'reserved' %}
 									<br>
+
+										<td style="background-color: blue;">
+											<form method="url_for( Reserve )" class="CheckInButton">
+												<input name="CancelRes" value="Cancel" type="submit" style="width: 100%">
+												<input name="User" value="{{dictItems['User']}}" type="hidden">
+												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+											</form>
+										</td>
 										<td style="background-color: yellow;">
 											<form method="url_for( Reserve )" class="CheckInButton">
 												<input name="CheckOutRes" value="Check Out" type="submit" style="width: 100%">
@@ -226,19 +210,12 @@
 				</div>
 			</div>
 			<div class="column40">
-
 				<div class="CalandarDisplayDiv">
 					CalandarDisplayDiv
 					<!--AvailableItemsDiv-->
 					<img src="http://www.federalholidayscalendar.com/wp-content/uploads/2017/08/Print-August-2018-Calendar.jpg" alt="Paris" class="center">
 				</div>
-
 			</div>
 		</div>
 	</div>
-
-<body>
-
-
-
 </html>
