@@ -13,12 +13,11 @@
 
 .filterDiv {
   float: left;
-  background-color: #2196F3;
-  color: #ffffff;
-  width: 100px;
-  line-height: 100px;
+  background-color: white;
+  color: white;
+  width: 23%;
   text-align: center;
-  margin: 2px;
+  margin: 1%;
   display: none;
 }
 
@@ -27,17 +26,20 @@
 }
 
 .container {
-  margin-top: 20px;
+  margin-top: 5px;
   overflow: hidden;
+  background-color: black;
 }
 
 /* Style the buttons */
 .btn {
-  border: none;
+  border-color: black;
   outline: none;
-  padding: 12px 16px;
-  background-color: #f1f1f1;
-  cursor: pointer;
+  background-color: #FFE4B2;
+  width: 23%;
+  padding-left: 1%;
+  border-radius: 4px;
+  overflow: hidden;
 }
 
 .btn:hover {
@@ -47,4 +49,9 @@
 .btn.active {
   background-color: #666;
   color: white;
+}
+
+input[type=submit] {
+    border: 2px solid black;
+    border-radius: 4px;
 }

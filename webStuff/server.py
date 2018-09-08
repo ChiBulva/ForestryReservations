@@ -24,8 +24,8 @@ def checkoutitem(Item, User, In, Out, DateIn, DateOut, Destination, Description)
 # -
 def checkinitem(Item, User):
     DesiredStatus = "in"
-    print(User)
-    print(Item)
+    #print(User)
+    #print(Item)
     changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, DesiredStatus)
 # -
@@ -70,7 +70,7 @@ def changeStatus(DesiredStatus, Item):
             outfile.writerow(row)
 
 def ResToOut(DesiredStatus, Item):
-    print("INSIDE OMG")
+    #print("INSIDE OMG")
     inputfile = csv.reader(open('./static/storage/HelpdeskItems.csv','r', encoding='utf-8'))
     #outfile =
     newFileArray = []
@@ -85,7 +85,7 @@ def ResToOut(DesiredStatus, Item):
     outfile = csv.writer(open('./static/storage/HelpdeskItems.csv','w'))
     for row in newFileArray:
         if(len(row)==0):
-            print(row)
+            pass
         else:
             #print(row)
             outfile.writerow(row)
@@ -95,7 +95,8 @@ def ResToOut(DesiredStatus, Item):
     newFileArray = []
     for row in inputfile:
         if(len(row)==0):
-            print(row)
+            pass
+            #print(row)
         elif(row[0]==Item):
             newFileArray.append([(str(row[0])),(str(row[1])),(str(row[2])),(str(row[3])),(str(row[4])),(str(row[5])),(str(row[6])),(str(row[7])),(str(DesiredStatus))])
         else:
@@ -104,7 +105,8 @@ def ResToOut(DesiredStatus, Item):
     outfile = csv.writer(open('./static/storage/CheckedoutandReserved.csv','w'))
     for row in newFileArray:
         if(len(row)==0):
-            print(row)
+            pass
+            #print(row)
         else:
             #print(row)
             outfile.writerow(row)
@@ -115,7 +117,8 @@ def addRowToCheckedOutAndReserved(Item, User, TimeIn, TimeOut, DateIn, DateOut, 
     newFileArray = []
     for row in inputfile:
         if(len(row)==0):
-            print(row)
+            #print(row)
+            pass
         else:
             newFileArray.append(row)
 
@@ -124,7 +127,8 @@ def addRowToCheckedOutAndReserved(Item, User, TimeIn, TimeOut, DateIn, DateOut, 
     outfile = csv.writer(open('./static/storage/CheckedoutandReserved.csv','w'))
     for row in newFileArray:
         if(len(row)==0):
-            print(row)
+            pass
+            #print(row)
         else:
             #print(row)
             outfile.writerow(row)
@@ -170,7 +174,7 @@ def csvtodict(filename):
     dict_list = []
 
     for line in passreader:
-        print(line)
+        #print(line)
         dict_list.append(line)
     return dict_list
 
@@ -214,10 +218,10 @@ def Reservations():
     CancelRes = data.get('CancelRes')
     Rescheck = 1
 
-    print()
-    print(CheckoutTrigger)
-    print(ReserveTrigger)
-    print()
+    #print()
+    #print(CheckoutTrigger)
+    #print(ReserveTrigger)
+    #print()
 
     #will check out an item
     if(CheckoutTrigger=='Checkout Item'):

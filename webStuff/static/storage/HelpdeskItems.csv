@@ -1,10 +1,10 @@
 Number,Item,ItemType,Status,Description
 1,PR2,Laptop,in,item Description
-2,PR3,Laptop,in,item Description
-3,SS1,Laptop,in,item Description
-4,SS2,Laptop,in,item Description
+2,PR3,Laptop,out,item Description
+3,SS1,Laptop,out,item Description
+4,SS2,Laptop,out,item Description
 5,A4,Laptop,in,item Description
-6,A5,Laptop,in,item Description
+6,A5,Laptop,reserved,item Description
 7,A6,Laptop,in,item Description
 8,A7,Laptop,in,item Description
 9,X1,Laptop,in,item Description
@@ -26,7 +26,7 @@ Number,Item,ItemType,Status,Description
 25,Presenter2,Presenter,in,item Description
 26,Presenter3,Presenter,in,item Description
 27,Webcam1,Webcam,in,item Description
-28,Webcam2,Webcam,reserved,item Description
+28,Webcam2,Webcam,in,item Description
 29,Webcam3,Webcam,in,item Description
 30,SDReader1,Reader,in,item Description
 31,SDReader2,Reader,in,item Description
