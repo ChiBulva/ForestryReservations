@@ -1,10 +1,10 @@
 Number,Item,ItemType,Status,Description
 1,PR2,Laptop,in,item Description
-2,PR3,Laptop,out,item Description
-3,SS1,Laptop,out,item Description
-4,SS2,Laptop,out,item Description
+2,PR3,Laptop,in,item Description
+3,SS1,Laptop,in,item Description
+4,SS2,Laptop,in,item Description
 5,A4,Laptop,in,item Description
-6,A5,Laptop,reserved,item Description
+6,A5,Laptop,in,item Description
 7,A6,Laptop,in,item Description
 8,A7,Laptop,in,item Description
 9,X1,Laptop,in,item Description
@@ -60,3 +60,4 @@ Number,Item,ItemType,Status,Description
 59,LASERPOINTER2,other,in,Laser Pointer
 60,LASERPOINTER,other,in,Laser Pointer
 61,LavalierMic1,Microphone,in,Mic
+62,NewItem,other,new,NewItem

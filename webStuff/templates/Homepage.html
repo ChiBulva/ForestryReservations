@@ -4,30 +4,19 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/ItemFilter.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./styles/datepicker.css') }}">
 <script type="text/javascript" src="static\scripts\ItemsDisplay.js" async></script>
+
+<script type="text/javascript">
+
+ function changeFunc($i) {
+	document.forms['OnidSubmit'].submit();
+ }
+
+</script>
 <html>
 	<div class="OverallDiv">
 		<div class="row">
-			<div class="column33">
-				<div class="AvailableItemsDiv">
-					<!--AvailableItemsDiv-->
-					<table style="width: 100%">
-						<th>Onid Username</th>
-						{% for dictItems in OnidList %}
-							<tr>
-								{% for key, value in dictItems.items() %}
-									<td>
-										<form method="url_for( Reservations )" style="border-color: rgb(255,153,0)">
-											<input name="User" value="{{value}}" type="submit" style="width: 100%">
-											<input name="Item" value="{{Item}}" type="hidden">
-										</form>
-									</td>
-								{% endfor %}
-							</tr>
-						{% endfor %}
-					</table>
-				</div>
-			</div>
-			<div class="column33">
+
+			<div class="column50">
 				<div class="AvailableItemsDiv">
 					<!--AvailableItemsDiv-->
 						<div id="myBtnContainer" style="border: none;">
@@ -69,11 +58,33 @@
 										</form>
 									</div>
 								{% endif %}
+								{% if dictItems['Status'] == 'new' %}
+									<div class="filterDiv {{dictItems['ItemType']}}" style="color: lightgreen; background-color: lightgreen;">
+										<form method="url_for( Reservations )">
+												<input name="User" value="{{User}}" type="hidden">
+												<input name="Item" placeholder="New Item..." type="input" style="width: 100%;">
+										</form>
+									</div>
+								{% endif %}
 							{% endfor %}
 						</div>
 				</div>
 			</div>
-			<div class="column33">
+			<div class="column50">
+				<div>
+					<form name="OnidSubmit" method="url_for( Reservations )" style=" border: none;">
+						<input list="browsers" name="User" style="width: 100%; border: solid 2px #666;" placeholder="Username..." onchange="changeFunc(value)">
+						<datalist id="browsers">
+							{% for dictItems in OnidList %}
+									{% for key, value in dictItems.items() %}
+										<option value="{{value}}">
+									{% endfor %}
+							{% endfor %}
+						</datalist>
+						<input name="Item" value="{{Item}}" type="hidden">
+						<input id="SubmitButton" type="hidden">
+					</form>
+				</div>
 			<form method="{{ url_for('Reservations') }}" class="SubmitButton" style="height: 100%; width: 100%">
 					{% if User != 'None' %}
 						<div style="width: 50%; float: left;">{{User}}</div>
@@ -119,13 +130,14 @@
 							<option value="6:00 PM">6:00 PM</option>
 						</select>
 					</div>
-					<input type="text" name="Description" placeholder="Description..." style="height: 20%">
-					<input type="text" name="Destination" placeholder="Destination..." style="height: 20%">
+					<input type="text" name="Description" placeholder="Description..." style="height: 50%; width: 50%; ">
+					<input type="text" name="Destination" placeholder="Destination..." style="height: 50%; width: 50%; ">
 				</div>
 						<input name="User" value="{{User}}" type="hidden">
 						<input name="Item" value="{{Item}}" type="hidden">
 						<input name="Destination" value="{{Destination}}" type="hidden">
 						<input name="Description" value="{{Description}}" type="hidden">
+						<input name="Status" value="{{Status}}" type="hidden">
 
 						<input name="CheckoutTrigger" value="Checkout Item" type="submit" style="width: 100%">
 						<input name="ReserveTrigger" value="Reserve Item" type="submit" style="width: 100%">
@@ -135,7 +147,7 @@
 		</div>
 		<div class="row">
 
-			<div class="column60">
+			<div class="column100">
 				<div class="CheckedoutItems">
 					<!--CheckedoutItems-->
 					<table style="width: 100%">
@@ -175,6 +187,7 @@
 												<input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%">
 												<input name="User" value="{{dictItems['User']}}" type="hidden">
 												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
 												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
 											</form>
 										</td>
@@ -184,21 +197,24 @@
 											{{dictItems['Status']}}
 										</td>
 										<td style="background-color: blue; width: 20%;">
-
-											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue; width: 20%;">
-												<input name="CancelRes" value="Cancel" type="submit">
+											<div style="width: 50%; float: left; border-color: blue;">
+											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
+												<input name="CancelRes" value="Cancel" type="submit" style="width: 100%; float: left;  margin: auto;">
 												<input name="User" value="{{dictItems['User']}}" type="hidden">
 												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
 												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
 											</form>
-
-											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue; width: 60%;">
-												<input name="CheckOutRes" value="Check Out" type="submit">
+											</div>
+											<div style="width: 50%; float: right; border-color: blue;">
+											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
+												<input name="CheckOutRes" value="Check Out" type="submit" style="width: 100%; float: right; margin: auto;">
 												<input name="User" value="{{dictItems['User']}}" type="hidden">
 												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
+												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
 												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
 											</form>
-
+											</div>
 										</td>
 									{% endif %}
 							</tr>
@@ -206,12 +222,12 @@
 					</table>
 				</div>
 			</div>
-			<div class="column40">
+<!--			<div class="column40">
 				<div class="CalandarDisplayDiv">
-					<!--CalandarDisplayDiv-->
-					<img src="http://www.federalholidayscalendar.com/wp-content/uploads/2017/08/Print-August-2018-Calendar.jpg" alt="Paris" class="center">
+				<!--CalandarDisplayDiv-->
+<!--					<img src="http://www.federalholidayscalendar.com/wp-content/uploads/2017/08/Print-August-2018-Calendar.jpg" alt="Paris" class="center">
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </html>

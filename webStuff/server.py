@@ -13,26 +13,31 @@ app = Flask(__name__)
 # -
 # - Needs:  Buttons: ReserveItem
 # -
-def checkoutitem(Item, User, In, Out, DateIn, DateOut, Destination, Description):
+def checkoutitem(Item, User, In, Out, DateIn, DateOut, Destination, Description, Status):
     DesiredStatus = "out"
     #Error checking done here
     #
-    changeStatus(DesiredStatus, Item)
+    if(Status!="new"):
+        print("   NOT ITEMNEW checkoutitem")
+        changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, "reserved")
     addRowToCheckedOutAndReserved(Item, User, In, Out, DateIn, DateOut, Destination, Description, DesiredStatus)
 # -
 # -
-def checkinitem(Item, User):
+def checkinitem(Item, User, Status):
     DesiredStatus = "in"
     #print(User)
     #print(Item)
-    changeStatus(DesiredStatus, Item)
+    if(Status!="new"):
+        changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, DesiredStatus)
 # -
 # -
-def reserveitem(Item, User, In, Out, DateIn, DateOut, Destination, Description):
+def reserveitem(Item, User, In, Out, DateIn, DateOut, Destination, Description, Status):
     DesiredStatus = "reserved"
-    changeStatus(DesiredStatus, Item)
+    if(Status!="new"):
+        print("   NOT ITEMNEW reserveitem")
+        changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, "out")
     addRowToCheckedOutAndReserved(Item, User, In, Out, DateIn, DateOut, Destination, Description, DesiredStatus)
 
@@ -40,9 +45,11 @@ def reservecheckout(Item, User):
     DesiredStatus = "out"
     changeStatus(DesiredStatus, Item)
 
-def cancelitem(Item, User):
+def cancelitem(Item, User, Status):
     DesiredStatus = "in"
-    changeStatus(DesiredStatus, Item)
+    if(Status!="new"):
+        print("   NOT ITEMNEW cancelitem")
+        changeStatus(DesiredStatus, Item)
     delRowFromCheckedOutAndReserved(Item, User, DesiredStatus)
 # -
 # -
@@ -55,7 +62,8 @@ def changeStatus(DesiredStatus, Item):
     newFileArray = []
     for row in inputfile:
         if(len(row)==0):
-            print(row)
+            #print(row)
+            pass
         elif(row[1]==Item):
             newFileArray.append([(str(row[0])),(str(row[1])),(str(row[2])),(str(DesiredStatus)),(str(row[4]))])
         else:
@@ -64,7 +72,8 @@ def changeStatus(DesiredStatus, Item):
     outfile = csv.writer(open('./static/storage/HelpdeskItems.csv','w'))
     for row in newFileArray:
         if(len(row)==0):
-            print(row)
+            #print(row)
+            pass
         else:
             #print(row)
             outfile.writerow(row)
@@ -76,7 +85,8 @@ def ResToOut(DesiredStatus, Item):
     newFileArray = []
     for row in inputfile:
         if(len(row)==0):
-            print(row)
+            #print(row)
+            pass
         elif(row[1]==Item):
             newFileArray.append([(str(row[0])),(str(row[1])),(str(row[2])),(str(DesiredStatus)),(str(row[4]))])
         else:
@@ -141,7 +151,8 @@ def delRowFromCheckedOutAndReserved(Item, User,  DesiredStatus):
         if(len(row)==0):
             pass
         elif(row[1]==User and row[0]==Item):
-            print("Skipped: "+str(User))
+            pass
+            #print("Skipped: "+str(User))
         else:
             newFileArray.append(row)
 
@@ -183,7 +194,7 @@ def Reserve():
 
 #Main page
 #
-@app.route('/', methods=['GET', 'POST', 'Item', 'User', 'lenInventoryList', 'TimeIn', 'TimeOut', 'DateIn', 'DateOut', 'Destination', 'Description', 'Rescheck', 'CheckoutTrigger', 'ReserveTrigger', 'CheckinTrigger', 'CheckOutRes', 'CancelRes'])
+@app.route('/', methods=['GET', 'POST', 'Item', 'User', 'lenInventoryList', 'TimeIn', 'TimeOut', 'DateIn', 'DateOut', 'Destination', 'Description', 'Rescheck', 'CheckoutTrigger', 'ReserveTrigger', 'CheckinTrigger', 'CheckOutRes', 'CancelRes', 'Status'])
 def Reservations():
     if request.method == 'POST':
     	data = request.form
@@ -216,6 +227,12 @@ def Reservations():
     DateIn = data.get('DateIn')
     DateOut = data.get('DateOut')
     CancelRes = data.get('CancelRes')
+    Status = data.get('Status')
+    print(Status)
+    print(Status)
+    print(Status)
+    print(Status)
+    print(Status)
     Rescheck = 1
 
     #print()
@@ -225,10 +242,10 @@ def Reservations():
 
     #will check out an item
     if(CheckoutTrigger=='Checkout Item'):
-        checkoutitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description)
+        checkoutitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description, Status)
 
     elif(CheckinTrigger=='Check-In'):
-        checkinitem(Item, User)
+        checkinitem(Item, User, Status)
         Item = 'None'
         User = 'None'
 
@@ -238,11 +255,11 @@ def Reservations():
         User = 'None'
 
     elif(ReserveTrigger=='Reserve Item'):
-        reserveitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description)
+        reserveitem(Item, User, TimeIn, TimeOut, DateIn, DateOut, Destination, Description, Status)
 
 
     elif(CancelRes=='Cancel'):
-        cancelitem(Item, User)
+        cancelitem(Item, User, Status)
         Item = 'None'
         User = 'None'
 
@@ -262,6 +279,7 @@ def Reservations():
     OnidList = csvtodict(filename)
     #print(OnidList)
 
+    Status = 'None'
     #Calls the HTML and css templates
     return render_template('Homepage.html',
         x=x,
@@ -281,6 +299,7 @@ def Reservations():
         DateIn=DateIn,
         DateOut=DateOut,
         CancelRes=CancelRes,
+        #Status=Status,
         Rescheck=Rescheck)
 
 #Found at URL: http://flask.pocoo.org/snippets/40/
@@ -298,4 +317,4 @@ def dated_url_for(endpoint, **values):
     return url_for(endpoint, **values)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=True, port=5001)
