@@ -43,7 +43,7 @@
 									</div>
 								{% endif %}
 								{% if dictItems['Status'] == 'reserved' %}
-									<div class="filterDiv {{dictItems['ItemType']}}" style="color: red; background-color: red;">
+									<div class="filterDiv {{dictItems['ItemType']}}" style="color: yellow; background-color: yellow;">
 										<form method="url_for( Reservations )">
 											<input name="User" value="{{User}}" type="hidden">
 											<input name="Item" value="{{dictItems['Item']}}" type="submit" style="width: 100%;">
@@ -51,7 +51,7 @@
 									</div>
 								{% endif %}
 								{% if dictItems['Status'] == 'out' %}
-									<div class="filterDiv {{dictItems['ItemType']}}" style="color: yellow; background-color: yellow;">
+									<div class="filterDiv {{dictItems['ItemType']}}" style="color: red; background-color: red;">
 										<form method="url_for( Reservations )">
 												<input name="User" value="{{User}}" type="hidden">
 												<input name="Item" value="{{dictItems['Item']}}" type="submit" style="width: 100%;">
@@ -71,7 +71,7 @@
 				</div>
 			</div>
 			<div class="column50">
-				<div>
+				<div style="border: none;">
 					<form name="OnidSubmit" method="url_for( Reservations )" style=" border: none;">
 						<input list="browsers" name="User" style="width: 100%; border: solid 2px #666;" placeholder="Username..." onchange="changeFunc(value)">
 						<datalist id="browsers">
@@ -99,8 +99,8 @@
 					{% if Rescheck == 0 %}
 				<div class="AddReservationDiv">
 					<div style="float: left; width: 50%;">
-						<input type="date" value="1980-08-26" name="DateOut" style="width: 100%">
-						<select name="TimeOut">
+						<input type="date" value="{{CurrentDate}}" name="DateIn" style="width: 100%">
+						<select name="TimeIn">
 						  <option value="8:00 AM">8:00 AM</option>
 						  <option value="9:00 AM">9:00 AM</option>
 						  <option value="10:00 AM">10:00 AM</option>
@@ -115,8 +115,8 @@
 						</select>
 					</div>
 					<div style="float: right; width: 50%;">
-						<input type="date" value="1980-08-26" name="DateIn" style="width: 100%">
-						<select name="TimeIn">
+						<input type="date" value="{{CurrentDate}}" name="DateOut" style="width: 100%">
+						<select name="TimeOut">
 						  <option value="8:00 AM">8:00 AM</option>
 						  <option value="9:00 AM">9:00 AM</option>
 						  <option value="10:00 AM">10:00 AM</option>
@@ -141,6 +141,11 @@
 
 						<input name="CheckoutTrigger" value="Checkout Item" type="submit" style="width: 100%">
 						<input name="ReserveTrigger" value="Reserve Item" type="submit" style="width: 100%">
+            {% if ErrorOrNot != 'None' and ErrorOrNot != 0 %}
+              <div style="background-color: red; ">
+                <font color="white" style="border: none;">{{ErrorOrNot}}</font>
+              </div>
+            {% endif %}
 					</form>
 				{% endif %}
 			</div>
@@ -151,72 +156,67 @@
 				<div class="CheckedoutItems">
 					<!--CheckedoutItems-->
 					<table style="width: 100%">
-						<th>Item</th><th>User</th><th>In</th><th>Out</th><th>Date In</th><th>Date Out</th><th>Destination</th><th>Description</th><th>Status</th>
+						<th>Item</th><th>User</th><th>Status</th><th>Functions</th><th>In</th><th>Out</th><th>Destination</th>
 						{% for dictItems in ReservedList %}
 							<tr style="background-color: white;">
+
 									<td>
-										{{dictItems['Item']}}
+										<font style="border: none;" size="6">{{dictItems['Item']}}</font>
 									</td>
 									<td>
 										{{dictItems['User']}}
 									</td>
+
+                  {% if dictItems['Status'] == 'out' %}
+                    <td style="background-color: red;">
+                      <font color="white" style="border: none;">{{dictItems['Status']}}</font>
+                    </td>
+                    <td style="background-color: GREEN; width: 15%;">
+                      <form method="url_for( Reserve )" class="CheckInButton" style="border-color: GREEN">
+                        <input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%;">
+                        <input name="User" value="{{dictItems['User']}}" type="hidden">
+                        <input name="Item" value="{{dictItems['Item']}}" type="hidden">
+                        <input name="Status" value="{{dictItems['Status']}}" type="hidden">
+                        <!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+                      </form>
+                    </td>
+                  {% endif %}
+                  {% if dictItems['Status'] == 'reserved' %}
+                    <td style="background-color: yellow;">
+                      {{dictItems['Status']}}
+                    </td>
+                    <td style="background-color: blue; width: 15%;">
+                      <div style="width: 50%; float: left; border-color: blue;">
+                      <form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
+                        <input name="CancelRes" value="Cancel" type="submit" style="width: 100%; float: left;  margin: auto;">
+                        <input name="User" value="{{dictItems['User']}}" type="hidden">
+                        <input name="Item" value="{{dictItems['Item']}}" type="hidden">
+                        <input name="Status" value="{{dictItems['Status']}}" type="hidden">
+                        <!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+                      </form>
+                      </div>
+                      <div style="width: 50%; float: right; border-color: blue;">
+                      <form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
+                        <input name="CheckOutRes" value="Check Out" type="submit" style="width: 100%; float: right; margin: auto;">
+                        <input name="User" value="{{dictItems['User']}}" type="hidden">
+                        <input name="Item" value="{{dictItems['Item']}}" type="hidden">
+                        <input name="Status" value="{{dictItems['Status']}}" type="hidden">
+                        <!--<input name="CheckinTrigger"  value="1" type="hidden">-->
+                      </form>
+                      </div>
+                    </td>
+                  {% endif %}
+
 									<td>
-										{{dictItems['In']}}
+										<font color="blue" style="border: none;">{{dictItems['In']}}</font> <br>{{dictItems['DateIn']}}
 									</td>
 									<td>
-										{{dictItems['Out']}}
-									</td>
-									<td>
-										{{dictItems['DateIn']}}
-									</td>
-									<td>
-										{{dictItems['DateOut']}}
+										<font color="Darkgreen" style="border: none;">{{dictItems['Out']}}</font> <br>{{dictItems['DateOut']}}
 									</td>
 									<td>
 										{{dictItems['Destination']}}
 									</td>
-									<td>
-										{{dictItems['Description']}}
-									</td>
-									{% if dictItems['Status'] == 'out' %}
-										<td style="background-color: yellow;">
-											{{dictItems['Status']}}
-										</td>
-										<td style="width: 20%;">
-											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: white">
-												<input name="CheckinTrigger" value="Check-In" type="submit" style="width: 100%">
-												<input name="User" value="{{dictItems['User']}}" type="hidden">
-												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
-												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
-												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
-											</form>
-										</td>
-									{% endif %}
-									{% if dictItems['Status'] == 'reserved' %}
-										<td style="background-color: red;">
-											{{dictItems['Status']}}
-										</td>
-										<td style="background-color: blue; width: 20%;">
-											<div style="width: 50%; float: left; border-color: blue;">
-											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
-												<input name="CancelRes" value="Cancel" type="submit" style="width: 100%; float: left;  margin: auto;">
-												<input name="User" value="{{dictItems['User']}}" type="hidden">
-												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
-												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
-												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
-											</form>
-											</div>
-											<div style="width: 50%; float: right; border-color: blue;">
-											<form method="url_for( Reserve )" class="CheckInButton" style="border-color: blue;">
-												<input name="CheckOutRes" value="Check Out" type="submit" style="width: 100%; float: right; margin: auto;">
-												<input name="User" value="{{dictItems['User']}}" type="hidden">
-												<input name="Item" value="{{dictItems['Item']}}" type="hidden">
-												<input name="Status" value="{{dictItems['Status']}}" type="hidden">
-												<!--<input name="CheckinTrigger"  value="1" type="hidden">-->
-											</form>
-											</div>
-										</td>
-									{% endif %}
+
 							</tr>
 						{% endfor %}
 					</table>
